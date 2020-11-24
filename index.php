@@ -15,7 +15,7 @@ else{
 }
 
 if(isset($_GET['end']) && $_GET['end'] !== "" && $tmp = convert2DateTime(filter_input(INPUT_GET, 'end', FILTER_SANITIZE_STRING))){
-    $end = $tmp->format('Y-m-d H:i:s');
+  $end = $tmp->format('Y-m-d H:i:s');
 }
 else{
   $end = date('Y-m-d 23:59:59', strtotime($start . " +1 week"));
@@ -60,7 +60,7 @@ function convert2DateTime($str){
   if(($tmp = date_create_from_format("Y-m-d H:i:s", $str)) !== false){
     return $tmp;
   }
-  if(($tmp = date_create_from_format("Y-m-d", $str)) !== false){
+  if(($tmp = date_create_from_format("Y-m-d|", $str)) !== false){
     return $tmp;
   }
 
