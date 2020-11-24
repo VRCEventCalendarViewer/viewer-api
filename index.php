@@ -7,20 +7,18 @@ if(isset($_GET['gcal_id']) && $_GET['gcal_id'] !== ""){
   $gcal_id = filter_input(INPUT_GET, 'gcal_id', FILTER_SANITIZE_STRING);
 }
 
-if(isset($_GET['start']) && $_GET['start'] !== ""
-  && ($tmp = strtotime(filter_input(INPUT_GET, 'start', FILTER_SANITIZE_STRING))) !== false){
-  $start = date('Y-m-d 00:00:00', $tmp);
+if(isset($_GET['start']) && $_GET['start'] !== "" && $tmp = convert2DateTime(filter_input(INPUT_GET, 'start', FILTER_SANITIZE_STRING))){
+  $start = $tmp->format('Y-m-d H:i:s');
 }
 else{
-  $start = date('Y-m-01 00:00:00');
+  $start = date('Y-m-d H:i:s');
 }
 
-if(isset($_GET['end']) && $_GET['end'] !== ""
-  && ($tmp = strtotime(filter_input(INPUT_GET, 'end', FILTER_SANITIZE_STRING))) !== false){
-  $end = date('Y-m-d 23:59:59', $tmp);
+if(isset($_GET['end']) && $_GET['end'] !== "" && $tmp = convert2DateTime(filter_input(INPUT_GET, 'end', FILTER_SANITIZE_STRING))){
+    $end = $tmp->format('Y-m-d H:i:s');
 }
 else{
-  $end = date('Y-m-d 23:59:59', strtotime($start . " +1 month -1 day"));
+  $end = date('Y-m-d 23:59:59', strtotime($start . " +1 week"));
 }
 
 $dest = DEST;
@@ -40,7 +38,7 @@ if(isset($gcal_id)){
   $stmt->bindValue(':gcal_id', $gcal_id, PDO::PARAM_STR);
 }
 else{
-  $sql = 'SELECT * FROM events WHERE start >= :start and end <= :end';
+  $sql = 'SELECT * FROM events WHERE start >= :start and end <= :end ORDER BY start';
   $stmt = $db->prepare($sql);
   //$stmt->bindValue(':itemLimit', 10, PDO::PARAM_INT);
   $stmt->bindValue(':start', $start, PDO::PARAM_STR);
@@ -54,3 +52,17 @@ $json['events'] = $result;
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
 echo json_encode($json, JSON_UNESCAPED_UNICODE);
+
+/**
+ * 文字列のDateTime型への変換を試みます
+ */
+function convert2DateTime($str){
+  if(($tmp = date_create_from_format("Y-m-d H:i:s", $str)) !== false){
+    return $tmp;
+  }
+  if(($tmp = date_create_from_format("Y-m-d", $str)) !== false){
+    return $tmp;
+  }
+
+  return false;
+}
