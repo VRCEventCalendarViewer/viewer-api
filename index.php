@@ -66,11 +66,6 @@ $stmt->bindValue(':sender_ip',  $sender_ip, PDO::PARAM_STR);
 $stmt->bindValue(':referer',    $referer,   PDO::PARAM_STR);
 $stmt->bindValue(':args',       $args,      PDO::PARAM_STR);
 
-var_dump($stmt->execute());
-echo($now);
-var_dump($sender_ip);
-echo($args);
-
 /**
  * 文字列のDateTime型への変換を試みます
  */
