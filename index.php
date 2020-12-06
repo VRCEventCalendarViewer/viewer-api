@@ -21,6 +21,7 @@ else{
   $end = date('Y-m-d 23:59:59', strtotime($start . " +1 week"));
 }
 
+// DB接続
 $dest = DEST;
 $user = USER;
 $pass = PASS;
@@ -49,7 +50,9 @@ $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $json['events'] = $result;
 
+// json出力
 header("Content-Type: application/json; charset=utf-8");
+header("X-Content-Type-Options: nosniff");
 header("Access-Control-Allow-Origin: *");
 echo json_encode($json, JSON_UNESCAPED_UNICODE);
 
