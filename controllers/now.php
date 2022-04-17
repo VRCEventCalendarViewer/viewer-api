@@ -24,7 +24,7 @@ class now{
     }
     
     // DBからデータ取得
-    $sql = 'SELECT * FROM events WHERE start <= :now and :now <= end ORDER BY start';
+    $sql = 'SELECT * FROM events WHERE start <= :now and :now <= end and is_deleted = false ORDER BY start';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':now', $now, PDO::PARAM_STR);
     $stmt->execute();

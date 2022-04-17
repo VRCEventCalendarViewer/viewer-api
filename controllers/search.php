@@ -41,12 +41,12 @@ class search{
     
     // DBからデータ取得
     if(isset($gcal_id)){
-      $sql = 'SELECT * FROM events WHERE gcal_id = :gcal_id';
+      $sql = 'SELECT * FROM events WHERE gcal_id = :gcal_id and is_deleted = false';
       $stmt = $db->prepare($sql);
       $stmt->bindValue(':gcal_id', $gcal_id, PDO::PARAM_STR);
     }
     else{
-      $sql = 'SELECT * FROM events WHERE start >= :start and end <= :end ORDER BY start';
+      $sql = 'SELECT * FROM events WHERE start >= :start and end <= :end and is_deleted = false ORDER BY start';
       $stmt = $db->prepare($sql);
       //$stmt->bindValue(':itemLimit', 10, PDO::PARAM_INT);
       $stmt->bindValue(':start', $start, PDO::PARAM_STR);

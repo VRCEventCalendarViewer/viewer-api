@@ -28,7 +28,7 @@ class event{
     }
     
     // DBからデータ取得
-    $sql = 'SELECT * FROM events WHERE gcal_id = :gcal_id';
+    $sql = 'SELECT * FROM events WHERE gcal_id = :gcal_id and is_deleted = false';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':gcal_id', $gcal_id, PDO::PARAM_STR);
     $stmt->execute();
